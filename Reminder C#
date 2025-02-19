@@ -1,0 +1,42 @@
+using System;
+using System.Windows.Forms;
+
+namespace NotificationApp
+{
+    public partial class MainForm : Form
+    {
+        private Timer timer;
+        private DateTime targetTime;
+
+        public MainForm()
+        {
+            InitializeComponent();
+            timer = new Timer();
+            timer.Interval = 1000; // 1 секунда
+            timer.Tick += Timer_Tick;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (DateTime.Now >= targetTime)
+            {
+                timer.Stop();
+                MessageBox.Show("Время пришло!", "Уведомление", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                statusLabel.Text = "Уведомление отправлено!";
+            }
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            if (DateTime.TryParse(timeTextBox.Text, out targetTime))
+            {
+                timer.Start();
+                statusLabel.Text = "Таймер запущен...";
+            }
+            else
+            {
+                MessageBox.Show("Введите корректное время!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+}
